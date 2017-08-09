@@ -1,0 +1,18 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/simple.csv",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1"
+    },{
+      "titles": "t2"
+    }, {
+      "name": "v1",
+      "virtual": true,
+      "aboutUrl": "#sub-{_row}",
+      "propertyUrl": "#pred-{_row}",
+      "valueUrl": "#obj-{_row}",
+      "default":  "#obj-{_row}"        
+    }]
+  }
+}

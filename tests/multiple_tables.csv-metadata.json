@@ -1,0 +1,47 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+        "ids" : "http://foo.example.org/CSV/People-IDs/",
+        "ages" : "http://foo.example.org/CSV/People-Ages/"
+    }
+  ],
+  "tables" : [
+    {
+        "url" : "multiple_tables.Name-ID.csv",
+        "tableSchema": {
+            "aboutUrl" : "ids:{ID}",
+            "columns": [
+                {
+                    "name": "Name",
+                    "propertyUrl" : "ids:name",
+                    "datatype" : "string"
+                },
+                {
+                    "name": "ID",
+                    "propertyUrl" : "ids:id",
+                    "datatype" : "integer"
+                }
+            ]
+        }
+    },
+    {
+        "url" : "multiple_tables.ID-Age.csv",
+        "tableSchema": {
+            "aboutUrl" : "ids:{ID}",
+            "columns": [
+                {
+                    "name": "ID",
+                    "propertyUrl" : "ids:id",
+                    "datatype" : "integer"
+                },
+                {
+                    "name": "Age",
+                    "propertyUrl" : "ages:age",
+                    "datatype" : "integer"
+                }
+            ]
+        }
+    }
+  ]
+}

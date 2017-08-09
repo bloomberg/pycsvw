@@ -1,0 +1,20 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/parsing.quoted_newlines.csv",
+  "tableSchema": {
+    "aboutUrl": "http://example.org/expense/{expense}",
+    "columns": [{
+      "titles": "expense",
+      "name": "expense",
+      "suppressOutput": true
+    },{
+      "titles": "description",
+      "propertyUrl": "http://example.org/desc",
+      "datatype": "string"
+    },{
+      "titles": "amount",
+      "propertyUrl": "http://example.org/amount",
+      "datatype": "integer"
+    }]
+  }
+}

@@ -1,0 +1,6 @@
+key,sector,id
+1,PUBLIC,10
+2,PRIVATE,null_id
+null_key,PRIVATE,11
+3,null_sector,12
+4,"",13

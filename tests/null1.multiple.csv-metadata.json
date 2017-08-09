@@ -1,0 +1,38 @@
+{
+    "@context": [
+        "http://www.w3.org/ns/csvw",
+        {
+            "owl": "http://www.w3.org/2002/07/owl#",
+            "@language": "en"
+        }
+    ],
+    "url": "title",
+    "@id": "http://example.org/2016/10/19",
+    "tableSchema": {
+        "aboutUrl": "http://keys.example.org/{key}",
+        "primaryKey": "key",
+        "columns": [
+        {
+                "name": "key",
+                "titles": "key",
+                "propertyUrl": "http://www.example.org/key",
+                "datatype": "token",
+                "null": ["null_key", "1"]
+            },
+            {
+                "name": "sector",
+                "titles": "sector",
+                "propertyUrl": "http://www.example.org/sector",
+                "datatype": "token",
+                "null": ["null_sector"]
+            },
+            {
+                "name": "id",
+                "titles": "id",
+                "propertyUrl": "http://www.example.org/id",
+                "datatype": "token",
+                "null": ["null_id", "10","11","12","13"]
+            }
+        ]
+    }
+}

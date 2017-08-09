@@ -1,0 +1,50 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/csvw", {
+      "car": "http://example.org/cars/",
+      "unit": "http://example.org/units/",
+      "meta": "http://example.org/properties/"
+  	}
+  ],
+  "tables": [
+    {
+      "url": "iso_encoding.csv",
+      "tableSchema": {
+        "aboutUrl": "car:{id}",
+        "primaryKey": "{id}",
+        "columns": [
+          {
+            "name": "id",
+            "propertyUrl": "meta:id",
+            "datatype": "token",
+            "required": true
+          },
+          {
+            "name": "name",
+            "propertyUrl": "meta:name",
+            "datatype": "string",
+            "required": true
+          },
+          {
+            "name": "type",
+            "propertyUrl": "meta:type",
+            "datatype": "enumeration",
+            "required": false
+          },
+          {
+            "name": "unit",
+            "datatype": "string",
+            "suppressOutput": true,
+            "required": false
+          },
+          {
+            "virtual": true,
+            "propertyUrl": "meta:UnitOfMeasurement",
+            "valueUrl": "unit:{unit}",
+            "required": false
+          }
+        ]
+      }
+    }
+  ]
+}

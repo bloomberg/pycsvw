@@ -1,0 +1,22 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+      "ns": "http://example.org/"
+    }
+  ],
+  "url": "http://example.org/simple.csv",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1"
+    },{
+      "titles": "t2"
+    }, {
+      "name": "v1",
+      "virtual": true,
+      "aboutUrl": "ns:sub-{_row}",
+      "propertyUrl": "ns:obj-{_row}",
+      "valueUrl": "ns:pred-{_row}"
+    }]
+  }
+}

@@ -1,0 +1,5 @@
+expense name,description
+taxi,go from x to y
+"quoted expense",for some reason it came with quotes in it
+flight,"had to fly ""escaped quotes business"" for this trip"
+car, some \ in it to be escaped

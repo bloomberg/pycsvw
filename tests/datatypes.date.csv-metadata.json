@@ -1,0 +1,49 @@
+{
+  "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+  "url": "https://www.example.org",
+  "dialect": {"trim": true},
+  "tableSchema": {
+    "primaryKey": "id",
+    "aboutUrl": "https://www.example.org/event/{id}",
+    "columns": [
+      {
+        "name": "id",
+        "titles": "id",
+        "propertyUrl": "https://www.example.org/id"
+      },
+      {
+        "name": "date1",
+        "titles": "date1",
+        "propertyUrl": "https://www.example.org/date1",
+        "datatype": {
+          "base": "date",
+          "format": "this_is_ignored"
+        }
+      },
+      {
+        "name": "date2",
+        "titles": "date2",
+        "propertyUrl": "https://www.example.org/date2",
+        "datatype": "date"
+      },
+      {
+        "name": "date3",
+        "titles": "date3",
+        "propertyUrl": "https://www.example.org/date3",
+        "datatype": "date"
+      },
+      {
+        "name": "date4",
+        "titles": "date4",
+        "propertyUrl": "https://www.example.org/date4",
+        "datatype": "date"
+      },
+      {
+        "name": "date5",
+        "titles": "date5",
+        "propertyUrl": "https://www.example.org/date5",
+        "datatype": "date"
+      }
+    ]
+  }
+}

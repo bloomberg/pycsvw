@@ -1,0 +1,12 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1"
+    },{
+      "titles": "t2"
+    },{
+      "titles": "t3"
+    }]
+  }
+}

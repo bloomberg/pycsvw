@@ -1,0 +1,55 @@
+{
+  "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+  "url": "https://www.example.org",
+  "dialect": {"trim": true},
+  "tableSchema": {
+    "primaryKey": "id",
+    "aboutUrl": "https://www.example.org/event/{id}",
+    "columns": [
+      {
+        "name": "id",
+        "titles": "id",
+        "propertyUrl": "https://www.example.org/id"
+      },
+      {
+        "name": "datetime1",
+        "titles": "datetime1",
+        "propertyUrl": "https://www.example.org/datetime1",
+        "datatype": {
+          "base": "dateTime",
+          "format": "this_is_ignored"
+        }
+      },
+      {
+        "name": "datetime2",
+        "titles": "datetime2",
+        "propertyUrl": "https://www.example.org/datetime2",
+        "datatype": "dateTime"
+      },
+      {
+        "name": "datetime3",
+        "titles": "datetime3",
+        "propertyUrl": "https://www.example.org/datetime3",
+        "datatype": "dateTime"
+      },
+      {
+        "name": "datetime4",
+        "titles": "datetime4",
+        "propertyUrl": "https://www.example.org/datetime4",
+        "datatype": "dateTime"
+      },
+      {
+        "name": "datetime5",
+        "titles": "datetime5",
+        "propertyUrl": "https://www.example.org/datetime5",
+        "datatype": "dateTime"
+      },
+      {
+        "name": "datetimestamp",
+        "titles": "datetimestamp",
+        "propertyUrl": "https://www.example.org/datetimestamp",
+        "datatype": "dateTimeStamp"
+      }
+    ]
+  }
+}

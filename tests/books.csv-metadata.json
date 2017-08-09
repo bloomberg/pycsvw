@@ -1,0 +1,37 @@
+{
+    "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+        "books": "http://www.books.org/",
+        "isbn": "http://www.books.org/isbn/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#"
+    }
+  ],
+  "url": "http://example.org/books.csv",
+  "tableSchema": {
+    "aboutUrl": "isbn:{isbn}",
+    "columns": [
+      {
+        "titles": "isbn",
+        "name": "isbn",
+        "propertyUrl": "books:isbnnumber",
+        "datatype": "positiveInteger"
+      },
+      {
+        "titles": "pages",
+        "propertyUrl": "books:pagecount",
+        "datatype": "unsignedShort"
+      },
+      {
+        "titles": "hardcover",
+        "propertyUrl": "books:hardcover",
+        "datatype": {"base": "boolean", "format": "yes|no"}
+      },
+      {
+        "titles": "price",
+        "propertyUrl": "books:price",
+        "datatype": "decimal"
+      }
+    ]
+  }
+}

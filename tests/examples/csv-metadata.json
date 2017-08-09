@@ -1,0 +1,19 @@
+{
+  "@type": "TableGroup",
+  "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+  "tables": [{
+    "url": "http://example.org/gov.uk/data/organizations.csv",
+    "tableSchema": "gov.uk/schema/organizations.json",
+    "suppressOutput": true
+  }, {
+    "url": "http://example.org/gov.uk/data/professions.csv",
+    "tableSchema": "gov.uk/schema/professions.json",
+    "suppressOutput": true
+  }, {
+    "url": "http://example.org/senior-roles.csv",
+    "tableSchema": "gov.uk/schema/senior-roles.json"
+  }, {
+    "url": "http://example.org/junior-roles.csv",
+    "tableSchema": "gov.uk/schema/junior-roles.json"
+  }]
+}

@@ -1,0 +1,10 @@
+env/
+env3/
+cov_html/
+.coverage
+*.py[cod]
+*~
+*.cache
+__pycache__/
+.tox/
+pycsvw.egg-info/

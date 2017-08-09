@@ -1,0 +1,8 @@
+expense,description,amount
+taxi,"description
+with two lines", 30
+multi-hop flight,"a->b
+b->c
+c->d
+d->a",1000
+dinner,"Joe’s restaurant and two apostrophes ('')",100

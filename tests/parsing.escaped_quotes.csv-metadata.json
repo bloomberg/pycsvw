@@ -1,0 +1,15 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/parsing.escaped_quotes.csv",
+  "tableSchema": {
+    "aboutUrl": "http://example.org/expense/{expense}",
+    "columns": [{
+      "titles": "expense name",
+      "name": "expense"
+    },{
+      "titles": "description",
+      "propertyUrl": "http://example.org/desc",
+      "datatype": "string"
+    }]
+  }
+}

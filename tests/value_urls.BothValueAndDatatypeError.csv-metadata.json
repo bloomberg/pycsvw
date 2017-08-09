@@ -1,0 +1,77 @@
+{
+    "@context": [
+        "http://www.w3.org/ns/csvw",
+        {
+            "owl": "http://www.w3.org/2002/07/owl#",
+            "@language": "en"
+        }
+    ],
+    "url": "title",
+    "@id": "http://example.org/2016/10/19",
+    "tableSchema": {
+        "aboutUrl": "http://example.org/{element}",
+        "primaryKey": "element",
+        "columns": [
+          {
+            "name": "element",
+            "titles": "element",
+            "suppressOutput": true,
+            "propertyUrl": "rdf:type",
+            "valueUrl": "http://example.org/element"
+          },
+          {
+            "name": "definition",
+            "titles": "definition",
+            "propertyUrl": "http://example.org/definition",
+            "datatype": "string"
+          },
+          {
+            "name": "type",
+            "titles": "type",
+            "datatype": "string",
+            "suppressOutput": true
+          },
+          {
+            "name": "maxlen",
+            "titles": "maxlen",
+            "datatype": "integer",
+            "suppressOutput": true
+          },
+          {
+            "name": "minlen",
+            "titles": "minlen",
+            "datatype": "integer",
+            "suppressOutput": true
+          },
+          {
+            "virtual": true,
+            "propertyUrl": "rdf:type",
+            "valueUrl": "http://example.org/element"
+          },
+          {
+            "virtual": true,
+            "propertyUrl": "rdfs:range",
+            "valueUrl": "http://example.org/element/{element}-RANGE"
+          },
+          {
+            "aboutUrl": "http://example.org/element/{element}-RANGE",
+            "virtual": true,
+            "propertyUrl": "owl:onDatatype",
+            "valueUrl": "xsd:{type}"
+          },
+          {
+            "virtual": true,
+            "aboutUrl": "http://example.org/element/{element}-RANGE",
+            "propertyUrl": "owl:withRestrictions",
+            "valueUrl": [
+              "xsd:{type}",
+              {
+                "value": "xsd:MaxLength",
+                "datatype": "nonNegativeInteger",
+                "requiredColumn": "maxlen"
+              }
+            ]
+          }
+        ]
+    }
+}
