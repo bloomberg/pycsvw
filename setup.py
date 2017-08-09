@@ -20,8 +20,6 @@ setup(
     author='Dev Ramudit, Erman Korkut',
     author_email='dramudit2@bloomberg.net, ekorkut1@bloomberg.net',
 
-    license='MIT',
-
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
