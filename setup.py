@@ -10,11 +10,10 @@
 # limitations under the License.
 
 from setuptools import setup, find_packages
-from pycsvw import __version__
 
 setup(
     name='pycsvw',
-    version=__version__,
+    version="1.0.0",
     description='Generate JSON and RDF from csv files with metadata',
     url='https://github.com/bloomberg/pycsvw',
     author='Dev Ramudit, Erman Korkut',
