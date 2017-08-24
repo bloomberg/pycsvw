@@ -14,6 +14,7 @@ from itertools import dropwhile, takewhile
 import tempfile
 from mock import patch
 import os
+import stat
 
 from six.moves import zip
 import pytest
@@ -213,9 +214,40 @@ def test_tmp_files():
     assert len(created_files) == 2, "ttl serialization should generate two temps file"
     assert any([f.endswith(".nt") for f in created_files])
     assert any([f.endswith(".ttl") for f in created_files])
+    # Check permissions
+    expected_flags = [stat.S_IRUSR, stat.S_IRGRP, stat.S_IROTH]
+    unexpected_flags = [stat.S_IWUSR, stat.S_IWGRP, stat.S_IWOTH]
+    for f in created_files:
+        st = os.stat(os.path.join(tmp_dir, f))
+        for flag, non_flag in zip(expected_flags, unexpected_flags):
+            assert bool(st.st_mode & flag)
+            assert not bool(st.st_mode & non_flag)
+
+    csvw.close()
+    assert len(os.listdir(tmp_dir)) == 0
 
 
+def test_context_mgr():
+    tmp_dir = tempfile.mkdtemp(dir="/tmp")
+    assert len(os.listdir(tmp_dir)) == 0
 
+    with CSVW(csv_path="./tests/books.csv",
+              metadata_path="./tests/books.csv-metadata.json",
+              temp_dir=tmp_dir) as csvw:
+        assert len(os.listdir(tmp_dir)) == 0
 
+        csvw.to_rdf(fmt="nt")
+        created_files = os.listdir(tmp_dir)
+        assert len(created_files) == 1, "nt serialization should generate only 1 temp file"
+        assert created_files[0].endswith(".nt")
 
+        os.remove(os.path.join(tmp_dir, created_files[0]))
+        assert len(os.listdir(tmp_dir)) == 0
 
+        csvw.to_rdf(fmt="turtle")
+        created_files = os.listdir(tmp_dir)
+        assert len(created_files) == 2, "ttl serialization should generate two temps file"
+        assert any([f.endswith(".nt") for f in created_files])
+        assert any([f.endswith(".ttl") for f in created_files])
+
+    assert len(os.listdir(tmp_dir)) == 0

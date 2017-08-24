@@ -39,6 +39,11 @@
             "suppressOutput": true
           },
           {
+            "name": "emptycol",
+            "titles": "emptycol",
+            "suppressOutput": true
+          },
+          {
             "virtual": true,
             "propertyUrl": "rdf:type",
             "valueUrl": "http://example.org/element"
@@ -83,8 +88,40 @@
           {
             "virtual": true,
             "aboutUrl": "http://example.org/element/{element}-RANGE",
-            "propertyUrl": "http://example.org/empty-list-predicate",
+            "propertyUrl": "http://example.org/another-list-value-with-constants",
+            "valueUrl": [
+              {
+                "value": "xsd:Length"
+              },
+              {
+                "literal": "1",
+                "datatype": "nonNegativeInteger"
+              }
+            ]
+          },
+          {
+            "virtual": true,
+            "aboutUrl": "http://example.org/element/{element}-RANGE",
+            "propertyUrl": "http://example.org/single-item-list",
+            "valueUrl": ["xsd:totalDigits"]
+          },
+          {
+            "virtual": true,
+            "aboutUrl": "http://example.org/element/{element}-RANGE",
+            "propertyUrl": "http://example.org/empty-list-predicate1",
             "valueUrl": []
+          },
+          {
+            "virtual": true,
+            "aboutUrl": "http://example.org/element/{element}-RANGE",
+            "propertyUrl": "http://example.org/empty-list-predicate2",
+            "valueUrl": [
+              {
+                "literal": "15",
+                "datatype": "nonNegativeInteger",
+                "requiredColumn": "emptycol"
+              }
+            ]
           }
 
 

@@ -61,6 +61,8 @@ def test_multiple_csv():
     csv2_url = "http://wrong.org/ID-Age.csv"
 
     csv1_handle = io.StringIO(u"some text")
+    csv2_handle = io.StringIO(u"some other text")
+    csv3_handle = io.StringIO(u"yet another text")
 
     with pytest.raises(ValueError) as exc:
         csvw = CSVW(metadata_path=multiple_metadata_path, csv_path=csv1_path)
@@ -71,6 +73,13 @@ def test_multiple_csv():
         CSVW(metadata_path=multiple_metadata_path, csv_handle=csv1_handle)
     assert "metadata (2)" in str(exc.value)
     assert "csv_handle's (1)" in str(exc.value)
+
+    # Too many csv_handle
+    with pytest.raises(ValueError) as exc:
+        CSVW(metadata_path=multiple_metadata_path,
+             csv_handle=(csv1_handle, csv2_handle, csv3_handle))
+    assert "metadata (2)" in str(exc.value)
+    assert "csv_handle's (3)" in str(exc.value)
 
     # Too little csv_url
     with pytest.raises(ValueError) as exc:

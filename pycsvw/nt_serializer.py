@@ -91,20 +91,20 @@ def write_objs_as_literal(output_obj, subject, predicate, raw_value, column_spec
         if datatype is not None:
             if isinstance(datatype, string_types):
                 # Don't specify strings
-                if not datatype == "string":
+                if datatype != "string":
                     kwargs["datatype"] = DATATYPE_MAP.get(datatype, datatype)
 
                     if datatype in DATE_TIME_TYPES:
                         value = process_dates_times(value, datatype)
-
             else:
                 # Dictionary valued data type
                 base = datatype["base"]
-                spec = datatype["format"]
-                kwargs["datatype"] = DATATYPE_MAP[base]
+                kwargs["datatype"] = DATATYPE_MAP.get(base, base)
                 if base == "boolean":
-                    true_value = spec.split('|')[0]
-                    value = "true" if value == true_value else "false"
+                    spec = datatype.get("format", None)
+                    if spec is not None:
+                        true_value = spec.split('|')[0]
+                        value = "true" if value == true_value else "false"
                 elif base in DATE_TIME_TYPES:
                     value = process_dates_times(value, base)
 
@@ -177,7 +177,7 @@ def write_obj_as_list(value_url, row_num, row, col, column_info,
                     b_node, RDF_FIRST, val
                 ).encode('utf-8'))
 
-            if ind != num_items - 1:
+            if ind != (num_items - 1):
                 # Still more items to come
                 new_node = get_new_blank_node()
                 output.write(u"{} <{}> {} .\n".format(

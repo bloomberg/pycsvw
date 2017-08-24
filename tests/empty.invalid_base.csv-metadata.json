@@ -1,0 +1,16 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/simple.csv",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1",
+      "datatype": {"base": "a_nonexistent", "format": ""}
+    },{
+      "titles": "t2",
+      "datatype": {"base": "x_nonexistent", "format": ""}
+    },{
+      "titles": "t3",
+      "datatype": {"base": "b", "format": ""}
+    }]
+  }
+}

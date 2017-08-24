@@ -1,0 +1,13 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/simple.csv",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1"
+    },{
+      "titles": "t2"
+    },{
+      "titles": "t3"
+    }]
+  }
+}

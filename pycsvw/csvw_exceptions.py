@@ -88,11 +88,13 @@ class InvalidItemError(Exception):
     """
     pass
 
+
 class MissingColumnError(KeyError):
     """
     The exception thrown when a column substitution fails to retrieve a column.
     """
     pass
+
 
 class FailedSubstitutionError(Exception):
     """

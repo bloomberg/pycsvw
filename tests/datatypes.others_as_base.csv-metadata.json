@@ -1,0 +1,352 @@
+{
+  "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+  "url": "https://www.example.org",
+  "dialect": {"trim": true},
+  "tableSchema": {
+    "primaryKey": "id",
+    "aboutUrl": "https://www.example.org/event/{id}",
+    "columns": [
+      {
+        "name": "id",
+        "titles": "id",
+        "propertyUrl": "https://www.example.org/id"
+      },
+      {
+        "name": "custom",
+        "titles": "custom",
+        "propertyUrl": "https://www.example.org/custom_pred",
+        "datatype": {
+          "base": "https://www.datatypes.org#mycustomdatatypedefinition"
+        }
+      },
+      {
+        "name": "anyURI",
+        "titles": "anyURI",
+        "propertyUrl": "https://www.example.org/anyURI",
+        "datatype": {
+          "base": "anyURI"
+        }
+      },
+      {
+        "name": "base64Binary",
+        "titles": "base64Binary",
+        "propertyUrl": "https://www.example.org/base64Binary",
+        "datatype": {
+          "base": "base64Binary"
+        }
+      },
+      {
+        "name": "boolean1",
+        "titles": "boolean1",
+        "propertyUrl": "https://www.example.org/boolean1",
+        "datatype": {
+          "base": "boolean"
+        }
+      },
+      {
+        "name": "boolean2",
+        "titles": "boolean2",
+        "propertyUrl": "https://www.example.org/boolean2",
+        "datatype": {
+          "base": "boolean"
+        }
+      },
+      {
+        "name": "boolean3",
+        "titles": "boolean3",
+        "propertyUrl": "https://www.example.org/boolean3",
+        "datatype": {
+          "base": "boolean"
+        }
+      },
+      {
+        "name": "boolean4",
+        "titles": "boolean4",
+        "propertyUrl": "https://www.example.org/boolean4",
+        "datatype": {
+          "base": "boolean"
+        }
+      },
+      {
+        "name": "integer",
+        "titles": "integer",
+        "propertyUrl": "https://www.example.org/integer",
+        "datatype": {
+          "base": "integer"
+        }
+      },
+      {
+        "name": "long",
+        "titles": "long",
+        "propertyUrl": "https://www.example.org/long",
+        "datatype": {
+          "base": "long"
+        }
+      },
+      {
+        "name": "int",
+        "titles": "int",
+        "propertyUrl": "https://www.example.org/int",
+        "datatype": {
+          "base": "int"
+        }
+      },
+      {
+        "name": "short",
+        "titles": "short",
+        "propertyUrl": "https://www.example.org/short",
+        "datatype": {
+          "base": "short"
+        }
+      },
+      {
+        "name": "byte",
+        "titles": "byte",
+        "propertyUrl": "https://www.example.org/byte",
+        "datatype": {
+          "base": "byte"
+        }
+      },
+      {
+        "name": "nonNegativeInteger",
+        "titles": "nonNegativeInteger",
+        "propertyUrl": "https://www.example.org/nonNegativeInteger",
+        "datatype": {
+          "base": "nonNegativeInteger"
+        }
+      },
+      {
+        "name": "positiveInteger",
+        "titles": "positiveInteger",
+        "propertyUrl": "https://www.example.org/positiveInteger",
+        "datatype": {
+          "base": "positiveInteger"
+        }
+      },
+      {
+        "name": "unsignedLong",
+        "titles": "unsignedLong",
+        "propertyUrl": "https://www.example.org/unsignedLong",
+        "datatype": {
+          "base": "unsignedLong"
+        }
+      },
+      {
+        "name": "unsignedInt",
+        "titles": "unsignedInt",
+        "propertyUrl": "https://www.example.org/unsignedInt",
+        "datatype": {
+          "base": "unsignedInt"
+        }
+      },
+      {
+        "name": "unsignedShort",
+        "titles": "unsignedShort",
+        "propertyUrl": "https://www.example.org/unsignedShort",
+        "datatype": {
+          "base": "unsignedShort"
+        }
+      },
+      {
+        "name": "unsignedByte",
+        "titles": "unsignedByte",
+        "propertyUrl": "https://www.example.org/unsignedByte",
+        "datatype": {
+          "base": "unsignedByte"
+        }
+      },
+      {
+        "name": "nonPositiveInteger",
+        "titles": "nonPositiveInteger",
+        "propertyUrl": "https://www.example.org/nonPositiveInteger",
+        "datatype": {
+          "base": "nonPositiveInteger"
+        }
+      },
+      {
+        "name": "negativeInteger",
+        "titles": "negativeInteger",
+        "propertyUrl": "https://www.example.org/negativeInteger",
+        "datatype": {
+          "base": "negativeInteger"
+        }
+      },
+      {
+        "name": "decimal",
+        "titles": "decimal",
+        "propertyUrl": "https://www.example.org/decimal",
+        "datatype": {
+          "base": "decimal"
+        }
+      },
+      {
+        "name": "double",
+        "titles": "double",
+        "propertyUrl": "https://www.example.org/double",
+        "datatype": {
+          "base": "double"
+        }
+      },
+      {
+        "name": "float",
+        "titles": "float",
+        "propertyUrl": "https://www.example.org/float",
+        "datatype": {
+          "base": "float"
+        }
+      },
+      {
+        "name": "duration",
+        "titles": "duration",
+        "propertyUrl": "https://www.example.org/duration",
+        "datatype": {
+          "base": "duration"
+        }
+      },
+      {
+        "name": "dayTimeDuration",
+        "titles": "dayTimeDuration",
+        "propertyUrl": "https://www.example.org/dayTimeDuration",
+        "datatype": {
+          "base": "dayTimeDuration"
+        }
+      },
+      {
+        "name": "yearMonthDuration",
+        "titles": "yearMonthDuration",
+        "propertyUrl": "https://www.example.org/yearMonthDuration",
+        "datatype": {
+          "base": "yearMonthDuration"
+        }
+      },
+      {
+        "name": "gDay",
+        "titles": "gDay",
+        "propertyUrl": "https://www.example.org/gDay",
+        "datatype": {
+          "base": "gDay"
+        }
+      },
+      {
+        "name": "gMonth",
+        "titles": "gMonth",
+        "propertyUrl": "https://www.example.org/gMonth",
+        "datatype": {
+          "base": "gMonth"
+        }
+      },
+      {
+        "name": "gMonthDay",
+        "titles": "gMonthDay",
+        "propertyUrl": "https://www.example.org/gMonthDay",
+        "datatype": {
+          "base": "gMonthDay"
+        }
+      },
+      {
+        "name": "gYear",
+        "titles": "gYear",
+        "propertyUrl": "https://www.example.org/gYear",
+        "datatype": {
+          "base": "gYear"
+        }
+      },
+      {
+        "name": "gYearMonth",
+        "titles": "gYearMonth",
+        "propertyUrl": "https://www.example.org/gYearMonth",
+        "datatype": {
+          "base": "gYearMonth"
+        }
+      },
+      {
+        "name": "hexBinary",
+        "titles": "hexBinary",
+        "propertyUrl": "https://www.example.org/hexBinary",
+        "datatype": {
+          "base": "hexBinary"
+        }
+      },
+      {
+        "name": "QName",
+        "titles": "QName",
+        "propertyUrl": "https://www.example.org/QName",
+        "datatype": {
+          "base": "QName"
+        }
+      },
+      {
+        "name": "string",
+        "titles": "string",
+        "propertyUrl": "https://www.example.org/string",
+        "datatype": {
+          "base": "string"
+        }
+      },
+      {
+        "name": "normalizedString",
+        "titles": "normalizedString",
+        "propertyUrl": "https://www.example.org/normalizedString",
+        "datatype": {
+          "base": "normalizedString"
+        }
+      },
+      {
+        "name": "token",
+        "titles": "token",
+        "propertyUrl": "https://www.example.org/token",
+        "datatype": {
+          "base": "token"
+        }
+      },
+      {
+        "name": "language",
+        "titles": "language",
+        "propertyUrl": "https://www.example.org/language",
+        "datatype": {
+          "base": "language"
+        }
+      },
+      {
+        "name": "Name",
+        "titles": "Name",
+        "propertyUrl": "https://www.example.org/Name",
+        "datatype": {
+          "base": "Name"
+        }
+      },
+      {
+        "name": "NMTOKEN",
+        "titles": "NMTOKEN",
+        "propertyUrl": "https://www.example.org/NMTOKEN",
+        "datatype": {
+          "base": "NMTOKEN"
+        }
+      },
+      {
+        "name": "xml",
+        "titles": "xml",
+        "propertyUrl": "https://www.example.org/xml",
+        "datatype": {
+          "base": "xml"
+        }
+      },
+      {
+        "name": "html",
+        "titles": "html",
+        "propertyUrl": "https://www.example.org/html",
+        "datatype": {
+          "base": "html"
+        }
+      },
+      {
+        "name": "json",
+        "titles": "json",
+        "propertyUrl": "https://www.example.org/json",
+        "datatype": {
+          "base": "json"
+        }
+      }
+    ]
+  }
+}
