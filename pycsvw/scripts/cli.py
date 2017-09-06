@@ -35,18 +35,18 @@ def main(csv_url, csv_path, metadata_url, metadata_path, json_dest, rdf_dest, te
     elif len(csv_path) == 1:
         csv_path = csv_path[0]
 
-    csvw = CSVW(csv_url=csv_url if csv_url else None,
-                csv_path=csv_path,
-                metadata_url=metadata_url,
-                metadata_path=metadata_path,
-                temp_dir=temp_dir,
-                riot_path=riot_path)
+    with CSVW(csv_url=csv_url if csv_url else None,
+              csv_path=csv_path,
+              metadata_url=metadata_url,
+              metadata_path=metadata_path,
+              temp_dir=temp_dir,
+              riot_path=riot_path) as csvw:
 
-    for form, dest in rdf_dest:
-        rdf_output = csvw.to_rdf(form)
-        with open(dest, "w") as rdf_file:
-            rdf_file.write(rdf_output)
-    if json_dest:
-        json_output = csvw.to_json()
-        with open(json_dest, "w") as json_file:
-            json.dump(json_output, json_file, indent=2)
+        for form, dest in rdf_dest:
+            rdf_output = csvw.to_rdf(form)
+            with open(dest, "w") as rdf_file:
+                rdf_file.write(rdf_output)
+        if json_dest:
+            json_output = csvw.to_json()
+            with open(json_dest, "w") as json_file:
+                json.dump(json_output, json_file, indent=2)

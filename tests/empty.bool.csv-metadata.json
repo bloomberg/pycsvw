@@ -1,0 +1,14 @@
+{
+  "@context": "http://www.w3.org/ns/csvw",
+  "url": "http://example.org/simple.csv",
+  "tableSchema": {
+    "columns": [{
+      "titles": "t1",
+      "datatype": {"base": "boolean", "format": "yes|no"}
+    },{
+      "titles": "t2"
+    },{
+      "titles": "t3"
+    }]
+  }
+}

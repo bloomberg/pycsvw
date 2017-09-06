@@ -19,6 +19,7 @@ from subprocess import Popen, PIPE
 import shlex
 import warnings
 from distutils.spawn import find_executable
+import stat
 
 from six.moves.urllib.request import urlopen  # pylint: disable=import-error
 from six import string_types
@@ -29,12 +30,14 @@ from . import nt_serializer
 from .csvw_exceptions import NoDefaultOrValueUrlError, \
     BothDefaultAndValueUrlError, BothLangAndDatatypeError, RiotWarning, RiotError
 
+READ_PERMISSIONS = stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+
 
 class CSVW(object):
     """ CSVW class to generate rdf/json given csv and its metadata. """
 
     @staticmethod
-    def read_metadata(handle):
+    def _read_metadata(handle):
         """ Read metadata json file.
         :param handle: File-like object of the metadata json file.
         :return: A dictionary representing the metadata.
@@ -93,7 +96,7 @@ class CSVW(object):
         return out
 
     @staticmethod
-    def get_metadata_handle(metadata_url, metadata_path, metadata_handle):
+    def _get_metadata_handle(metadata_url, metadata_path, metadata_handle):
         """ Process input arguments regarding metadata and 
         return file-like object read_metadataholding it."""
         if metadata_path and metadata_url:
@@ -109,7 +112,7 @@ class CSVW(object):
 
         return metadata_handle
 
-    def read_tables(self, table_urls, csv_url, csv_path, csv_handle, csv_encoding):
+    def _read_tables(self, table_urls, csv_url, csv_path, csv_handle, csv_encoding):
         """Read the CSV file(s) into tables"""
 
         csv_args = (csv_url, csv_path, csv_handle)
@@ -175,23 +178,23 @@ class CSVW(object):
             else:
                 this_csv_handle = csv_handle[handle_offset]
                 handle_offset += 1
-            self.tables[table_url] = this_csv_handle
+            self._tables[table_url] = this_csv_handle
 
     def __init__(self, csv_url=None, csv_path=None, csv_handle=None,
                  metadata_url=None, metadata_path=None, metadata_handle=None,
                  csv_encoding="utf-8", temp_dir=None, riot_path=None):
         self.temp_dir = temp_dir if temp_dir else gettempdir()
-        self.nt_output_file = None
-        self.prefixes_ttl_file = None
         self.riot_path = riot_path if riot_path else "riot"
-        self.namespaces = {}
+        self._nt_output_file = None
+        self._prefixes_ttl_file = None
+        self._namespaces = {}
         # tables is a dictionary from table url to a file-like obj for csv file
-        self.tables = {}
+        self._tables = {}
         # Put csv_handle into a list if it is specified
         if not isinstance(csv_handle, (list, set, tuple)) and csv_handle is not None:
             csv_handle = [csv_handle]
 
-        metadata_handle = self.get_metadata_handle(metadata_url, metadata_path, metadata_handle)
+        metadata_handle = self._get_metadata_handle(metadata_url, metadata_path, metadata_handle)
 
         # Extract namespaces from metadata
         # Note that this throws warnings since curly braces are not valid URIs,
@@ -200,26 +203,38 @@ class CSVW(object):
         graph = Graph().parse(data=metadata_handle.read(), format="json-ld")
         logging.disable(logging.NOTSET)
         # Convert it into a dictionary
-        self.namespaces = {prefix: url.toPython() for prefix, url in graph.namespaces()}
+        self._namespaces = {prefix: url.toPython() for prefix, url in graph.namespaces()}
         # Set it back to the beginning of file
         metadata_handle.seek(0)
 
         # Read metadata - csv_url does not need to be passed if it is a list, since
         # urls have to be specified in metadata in that case anyhow.
         try:
-            self.metadata = self.read_metadata(metadata_handle)
+            self._metadata = self._read_metadata(metadata_handle)
         finally:
             metadata_handle.close()
         # Get the table url(s), this will be used to map tables to corresponding metadata
-        table_urls = [x["url"] for x in self.metadata["tables"]]
+        table_urls = [x["url"] for x in self._metadata["tables"]]
 
         # Read the table(s)
-        self.read_tables(table_urls, csv_url, csv_path, csv_handle, csv_encoding)
+        self._read_tables(table_urls, csv_url, csv_path, csv_handle, csv_encoding)
 
-    def __del__(self):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
+    def close(self):
         # Close all csv handles
-        for t in self.tables:
-            self.tables[t].close()
+        for t in self._tables:
+            self._tables[t].close()
+
+        # Remove temporary files
+        if self._nt_output_file:
+            os.remove(self._nt_output_file)
+        if self._prefixes_ttl_file:
+            os.remove(self._prefixes_ttl_file)
 
     def to_rdf_files(self, file_format_tuples):
         """ Generate rdf serializations for specified formats into the specified file objects.
@@ -227,36 +242,36 @@ class CSVW(object):
         [(ttl_file_obj, "turtle"), (nt_file_obj, "nt")]
         :return: None.
         """
-        if self.nt_output_file is None or not os.path.exists(self.nt_output_file):
+        if self._nt_output_file is None or not os.path.exists(self._nt_output_file):
             nt_out = NamedTemporaryFile(dir=self.temp_dir, suffix=".nt", delete=False)
-            nt_serializer.serialize(self.tables,
-                                    self.metadata["tables"],
-                                    self.namespaces,
+            nt_serializer.serialize(self._tables,
+                                    self._metadata["tables"],
+                                    self._namespaces,
                                     nt_out)
-            self.nt_output_file = nt_out.name
+            self._nt_output_file = nt_out.name
             nt_out.close()
-            os.chmod(self.nt_output_file, 0o444)
+            os.chmod(self._nt_output_file, READ_PERMISSIONS)
 
         riot_checked = False
         for file_obj, fmt in file_format_tuples:
             if fmt.upper() in ["NT", "N-TRIPLE", "N-TRIPLES"]:
                 # Write the contents of serialized NT directly
-                with io.open(self.nt_output_file, 'r', encoding="utf-8", newline='') as nt_file:
+                with io.open(self._nt_output_file, 'r', encoding="utf-8", newline='') as nt_file:
                     file_obj.write(nt_file.read().encode("utf-8"))
             else:
                 # Compute prefixes file
-                if self.prefixes_ttl_file is None and self.namespaces != {}:
+                if self._prefixes_ttl_file is None and self._namespaces != {}:
                     prefixes_ttl = NamedTemporaryFile(dir=self.temp_dir,
                                                       suffix=".ttl", delete=False)
-                    self.prefixes_ttl_file = prefixes_ttl.name
-                    for pre, url in self.namespaces.items():
+                    self._prefixes_ttl_file = prefixes_ttl.name
+                    for pre, url in self._namespaces.items():
                         prefixes_ttl.write(u"@prefix {}: <{}> .\n".format(pre, url).encode('utf-8'))
                     prefixes_ttl.close()
-                    os.chmod(self.prefixes_ttl_file, 0o444)
-                prefixes = self.prefixes_ttl_file + " " if self.namespaces != {} else ""
+                    os.chmod(self._prefixes_ttl_file, READ_PERMISSIONS)
+                prefixes = self._prefixes_ttl_file + " " if self._namespaces != {} else ""
 
                 # Check that 'riot' is command in the system path
-                if riot_checked is False and find_executable(self.riot_path) is None:
+                if (not riot_checked) and find_executable(self.riot_path) is None:
                     raise ValueError("Could not locate '{}' in the system".format(self.riot_path))
                 riot_checked = True
 
@@ -264,7 +279,7 @@ class CSVW(object):
                 fmt = "RDFXML" if fmt.upper() == "RDF" or fmt.upper() == "XML" else fmt
 
                 cmd = self.riot_path + " --formatted='{}' {} {}".format(
-                    fmt, prefixes, self.nt_output_file)
+                    fmt, prefixes, self._nt_output_file)
                 err = PIPE
                 riot_process = Popen(shlex.split(cmd), stdout=file_obj, stderr=err)
                 file_obj, err = riot_process.communicate()

@@ -1,0 +1,43 @@
+{
+  "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+  "url": "https://www.example.org",
+  "dialect": {"trim": true},
+  "tableSchema": {
+    "primaryKey": "id",
+    "aboutUrl": "https://www.example.org/event/{id}",
+    "columns": [
+      {
+        "name": "id",
+        "titles": "id",
+        "propertyUrl": "https://www.example.org/id"
+      },
+      {
+        "name": "bool1",
+        "titles": "bool1",
+        "propertyUrl": "https://www.example.org/bool1",
+        "datatype": {
+          "base": "boolean",
+          "format": "yes|no"
+        }
+      },
+      {
+        "name": "bool2",
+        "titles": "bool2",
+        "propertyUrl": "https://www.example.org/bool2",
+        "datatype": {
+          "base": "boolean",
+          "format": "y|n"
+        }
+      },
+      {
+        "name": "bool3",
+        "titles": "bool3",
+        "propertyUrl": "https://www.example.org/bool3",
+        "datatype": {
+          "base": "boolean",
+          "format": "aa|bb"
+        }
+      }
+    ]
+  }
+}
