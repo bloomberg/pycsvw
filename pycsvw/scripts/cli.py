@@ -45,7 +45,7 @@ def main(csv_url, csv_path, metadata_url, metadata_path, json_dest, rdf_dest, te
         for form, dest in rdf_dest:
             rdf_output = csvw.to_rdf(form)
             with open(dest, "w") as rdf_file:
-                rdf_file.write(rdf_output)
+                rdf_file.write(rdf_output.encode('utf-8'))
         if json_dest:
             json_output = csvw.to_json()
             with open(json_dest, "w") as json_file:
