@@ -11,6 +11,7 @@
 
 """ Command line interface for pycsvw """
 import json
+import io
 
 import click  # pylint: disable=import-error
 
@@ -44,7 +45,7 @@ def main(csv_url, csv_path, metadata_url, metadata_path, json_dest, rdf_dest, te
 
         for form, dest in rdf_dest:
             rdf_output = csvw.to_rdf(form)
-            with open(dest, "w") as rdf_file:
+            with io.open(dest, "wb") as rdf_file:
                 rdf_file.write(rdf_output.encode('utf-8'))
         if json_dest:
             json_output = csvw.to_json()
