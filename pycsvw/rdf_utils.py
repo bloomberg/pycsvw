@@ -48,7 +48,7 @@ def get_column_map(table_schema):
     return column_map
 
 
-def apply_sub(url, row, column_name_to_sub, column_info):
+def apply_sub(url, row, column_name_to_sub, column_info, quote_sub=True):
     """ Apply a given substitution and raise if it is a null value. """
     try:
         column_ind, column_spec = column_info['column_map'][column_name_to_sub]
@@ -59,10 +59,13 @@ def apply_sub(url, row, column_name_to_sub, column_info):
         raise NullValueException("'{}' is one of the null values specified")
 
     rep_before = "{" + column_name_to_sub + "}"
-    return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/'))
+    if quote_sub:
+        return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/'))
+    else:
+        return url.replace(rep_before, rep_after)
 
 
-def apply_all_subs(url, row_num, row, column_info):
+def apply_all_subs(url, row_num, row, column_info, quote_sub=True):
     """ Apply all substitutions (in format of {columnName}) and resolve the url """
 
     # Early return just with resolving if nothing to substitute
@@ -74,7 +77,7 @@ def apply_all_subs(url, row_num, row, column_info):
     subs = SUB_PATTERN.findall(out)
     for sub in subs:
         try:
-            out = apply_sub(out, row, sub, column_info)
+            out = apply_sub(out, row, sub, column_info, quote_sub)
         except NullValueException:
             raise
         except Exception as e:

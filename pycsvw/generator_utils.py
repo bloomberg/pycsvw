@@ -114,6 +114,7 @@ def parse_datetime(input_str):
 
 def process_dates_times(value, base):
     """Entry function to process any date, time or dateTime."""
+    out = ""
     if base == "date":
         out = parse_date(value)
     elif base == "time":
