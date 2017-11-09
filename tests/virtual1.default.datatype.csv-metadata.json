@@ -8,16 +8,40 @@
   "url": "http://example.org/simple.csv",
   "tableSchema": {
     "aboutUrl": "ns:sub-{_row}",
-    "columns": [{
+    "columns": [
+      {
       "titles": "t1"
-    },{
+      },
+      {
       "titles": "t2"
-    }, {
+      },
+      {
+        "name": "description",
+        "titles": "description",
+        "suppressOutput": true
+      },
+      {
       "name": "v1",
       "virtual": true,
       "propertyUrl": "ns:active",
       "default": "true",
       "datatype": "boolean"
-    }]
+      },
+      {
+      "name": "v2",
+      "virtual": true,
+      "propertyUrl": "ns:stringprop1",
+      "default": "some string",
+      "datatype": "string"
+      },
+      {
+      "name": "v3",
+      "virtual": true,
+      "propertyUrl": "ns:stringprop2",
+      "default": "{description}",
+      "datatype": "string"
+      }
+
+    ]
   }
 }

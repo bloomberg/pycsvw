@@ -249,8 +249,8 @@ def write_row(output, row_num, row, table_info):
                 obj_val = apply_all_subs(value_url, row_num, row, column_info)
                 write_objs_as_uri(output, subject, predicate, obj_val)
         elif column_spec["default"]:
-            # Apply any substitution first
-            obj_val = apply_all_subs(column_spec["default"], row_num, row, column_info)
+            # Apply any substitution first, but without quoting
+            obj_val = apply_all_subs(column_spec["default"], row_num, row, column_info, False)
             write_objs_as_literal(output, subject, predicate, obj_val, column_spec)
 
 
