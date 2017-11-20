@@ -44,6 +44,11 @@
             "suppressOutput": true
           },
           {
+            "name": "emptycol",
+            "titles": "emptycol",
+            "suppressOutput": true
+          },
+          {
             "virtual": true,
             "propertyUrl": "rdf:type",
             "valueUrl": "http://example.org/element"

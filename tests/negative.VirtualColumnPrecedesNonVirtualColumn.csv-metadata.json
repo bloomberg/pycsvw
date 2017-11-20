@@ -4,7 +4,14 @@
   "tableSchema": {
     "columns": [{
       "titles": "t1"
-    },{
+    },
+      {
+      "name": "v1",
+      "virtual": true,
+      "aboutUrl": "owl:sub-{_row}",
+      "propertyUrl": "owl:obj-{_row}",
+      "valueUrl": "owl:pred-{_row}"
+    }, {
       "titles": "t2"
     }]
   }

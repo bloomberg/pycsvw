@@ -15,7 +15,9 @@ import io
 import pytest
 
 from pycsvw import CSVW
-from pycsvw.csvw_exceptions import BothLangAndDatatypeError
+from pycsvw.csvw_exceptions import BothLangAndDatatypeError, \
+    NumberOfNonVirtualColumnsMismatch, \
+    VirtualColumnPrecedesNonVirtualColumn
 
 
 def test_single_csv():
@@ -134,6 +136,42 @@ def test_json_generation():
     with pytest.raises(NotImplementedError) as exc:
         csvw.to_json()
     assert "JSON generation" in str(exc.value)
+
+
+def test_metadata_mismatch():
+    csv_path = "tests/negative.metadata_mismatch.csv"
+
+    csvw1 = CSVW(csv_path=csv_path,
+                 metadata_path="tests/negative.NumberOfNonVirtualColumnsMismatch1.csv-metadata.json")
+    csvw2 = CSVW(csv_path=csv_path,
+                 metadata_path="tests/negative.NumberOfNonVirtualColumnsMismatch2.csv-metadata.json")
+
+    with pytest.raises(NumberOfNonVirtualColumnsMismatch) as exc:
+        print(csvw1.to_rdf())
+    assert "metadata, 2" in str(exc.value)
+    assert "row 1, 3" in str(exc.value)
+
+    with pytest.raises(NumberOfNonVirtualColumnsMismatch) as exc:
+        print(csvw2.to_rdf())
+    assert "metadata, 4" in str(exc.value)
+    assert "row 1, 3" in str(exc.value)
+
+    with pytest.raises(VirtualColumnPrecedesNonVirtualColumn) as exc:
+        CSVW(csv_path=csv_path,
+             metadata_path='tests/negative.VirtualColumnPrecedesNonVirtualColumn.csv-metadata.json')
+    assert "t2" in str(exc.value)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,13 +2,17 @@
   "@context": "http://www.w3.org/ns/csvw",
   "url": "http://example.org/simple.csv",
   "tableSchema": {
-    "columns": [{
-      "titles": "t1",
-      "name": "t1"
-    },{
-      "titles": "t2",
-      "name": "t2"
-    }, {
+    "columns": [
+      {
+      "titles": "t1"
+      },
+      {
+      "titles": "t2"
+      },
+      {
+      "titles": "t3"
+      },
+      {
       "name": "v1",
       "virtual": true,
       "aboutUrl": "#sub-{_row}",

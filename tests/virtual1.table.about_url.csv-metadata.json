@@ -8,11 +8,17 @@
   "url": "http://example.org/simple.csv",
   "tableSchema": {
     "aboutUrl": "ns:sub-{_row}",
-    "columns": [{
+    "columns": [
+      {
       "titles": "t1"
-    },{
+      },
+      {
       "titles": "t2"
-    }, {
+      },
+      {
+      "titles": "t3"
+      },
+      {
       "name": "v1",
       "virtual": true,
       "propertyUrl": "ns:obj-{_row}",

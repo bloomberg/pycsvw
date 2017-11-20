@@ -20,6 +20,21 @@ class NoDefaultOrValueUrlError(Exception):
     pass
 
 
+class NumberOfNonVirtualColumnsMismatch(Exception):
+    """
+    The exception throw when number of non-virtual columns in metadata
+    does not match number of columns in CSV file.
+    """
+    pass
+
+
+class VirtualColumnPrecedesNonVirtualColumn(Exception):
+    """
+    The exception thrown when a virtual column precedes a non-virtual column
+    in the specified metadata.
+    """
+
+
 class BothDefaultAndValueUrlError(Exception):
     """
     The exception thrown when a virtual column specifies both
