@@ -203,8 +203,6 @@ def write_row(output, row_num, row, table_info):
         column_spec = table_schema["columns"][column_ind]
         if column_spec["suppressOutput"]:
             continue
-        if column_spec["virtual"]:
-            continue
 
         # Get the subject
         try:
