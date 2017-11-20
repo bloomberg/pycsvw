@@ -33,6 +33,7 @@ class VirtualColumnPrecedesNonVirtualColumn(Exception):
     The exception thrown when a virtual column precedes a non-virtual column
     in the specified metadata.
     """
+    pass
 
 
 class BothDefaultAndValueUrlError(Exception):
