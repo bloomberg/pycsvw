@@ -17,7 +17,7 @@ from six.moves.urllib.parse import quote  # pylint: disable=import-error
 from .csvw_exceptions import NullValueException, MissingColumnError, FailedSubstitutionError
 
 
-SUB_PATTERN = re.compile(r'{(\w+)}')
+SUB_PATTERN = re.compile(r'{([A-Za-z0-9_\-# /:]+)}')
 
 
 def is_null_value(val, null_values):
@@ -60,7 +60,7 @@ def apply_sub(url, row, column_name_to_sub, column_info, quote_sub=True):
 
     rep_before = "{" + column_name_to_sub + "}"
     if quote_sub:
-        return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/'))
+        return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/#'))
     else:
         return url.replace(rep_before, rep_after)
 

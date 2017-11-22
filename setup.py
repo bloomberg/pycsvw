@@ -13,7 +13,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pycsvw',
-    version="1.0.1",
+    version="1.0.2",
     description='Generate JSON and RDF from csv files with metadata',
     url='https://github.com/bloomberg/pycsvw',
     author='Dev Ramudit, Erman Korkut',

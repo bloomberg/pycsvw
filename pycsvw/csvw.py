@@ -28,7 +28,8 @@ from past.builtins import basestring
 
 from . import nt_serializer
 from .csvw_exceptions import NoDefaultOrValueUrlError, \
-    BothDefaultAndValueUrlError, BothLangAndDatatypeError, RiotWarning, RiotError
+    BothDefaultAndValueUrlError, BothLangAndDatatypeError, \
+    VirtualColumnPrecedesNonVirtualColumn, RiotWarning, RiotError
 
 READ_PERMISSIONS = stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
 
@@ -92,6 +93,16 @@ class CSVW(object):
 
                 col["aboutUrl"] = col.get("aboutUrl", None)
                 col["suppressOutput"] = col.get("suppressOutput", False)
+            # Non-virtual columns should precede virtual columns
+            virtual_seen_yet = False
+            for col in table_schema["columns"]:
+                if not virtual_seen_yet and col["virtual"]:
+                    virtual_seen_yet = True
+                    continue
+                if virtual_seen_yet and not col["virtual"]:
+                    raise VirtualColumnPrecedesNonVirtualColumn(
+                        "Non-virtual column {} comes after a virtual column. "
+                        "All virtual columns should come after non-virtual columns.".format(col))
 
         return out
 

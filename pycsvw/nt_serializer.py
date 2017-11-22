@@ -16,7 +16,8 @@ from six import string_types
 
 from .generator_utils import process_dates_times, DATATYPE_MAP, read_csv
 from .csvw_exceptions import NullValueException, BothValueAndLiteralError, \
-    BothValueAndDatatypeError, NoValueOrLiteralError, InvalidItemError
+    BothValueAndDatatypeError, NoValueOrLiteralError, InvalidItemError, \
+    NumberOfNonVirtualColumnsMismatch
 from .rdf_utils import is_null_value, get_column_map, get_subject_for_cell, \
     get_predicate_for_cell, apply_all_subs
 
@@ -271,6 +272,7 @@ def serialize(tables, md_tables, custom_prefixes, output_obj):
                 'prefixes': custom_prefixes
             }
         }
+        num_nonvirtual_columns = sum([1 for x in metadata["tableSchema"]["columns"] if not x["virtual"]])
         # Read the csv file fresh after rewinding the file
         table_file_obj = tables[table_url]
         table_file_obj.seek(0)
@@ -279,4 +281,10 @@ def serialize(tables, md_tables, custom_prefixes, output_obj):
         next(table_csv_reader)  # Ignore header
 
         for row_num, row in enumerate(table_csv_reader):
+            if len(row) != num_nonvirtual_columns:
+                raise NumberOfNonVirtualColumnsMismatch(
+                    "The number of non-virtual columns in metadata, {}, "
+                    "do not match with the number of columns in row {}, {}, "
+                    "of the csv file '{}'.".format(
+                        num_nonvirtual_columns, row_num + 1, len(row), table_url))
             write_row(output_obj, str(row_num + 1), row, table_info)

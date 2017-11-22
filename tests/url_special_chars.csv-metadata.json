@@ -1,0 +1,77 @@
+{
+    "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+        "pre": "http://www.example.org/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#"
+    }
+  ],
+  "url": "http://example.org/url_safe_chars.csv",
+  "tableSchema": {
+    "aboutUrl": "pre:{t#}/{t/}/{t:}/{t-}/{t }/{t_}",
+    "columns": [
+      {
+        "titles": "t#",
+        "name": "t#",
+        "propertyUrl": "pre:t#p",
+        "datatype": "string"
+      },
+      {
+        "titles": "t/",
+        "name": "t/",
+        "propertyUrl": "pre:t/p",
+        "datatype": "string"
+      },
+      {
+        "titles": "t:",
+        "name": "t:",
+        "propertyUrl": "pre:t:p",
+        "datatype": "string"
+      },
+      {
+        "titles": "t-",
+        "name": "t-",
+        "propertyUrl": "pre:t-p",
+        "datatype": "string"
+      },
+      {
+        "titles": "t ",
+        "name": "t ",
+        "propertyUrl": "pre:t%20p",
+        "datatype": "string"
+      },
+      {
+        "titles": "t_",
+        "name": "t_",
+        "propertyUrl": "pre:t_p",
+        "datatype": "string"
+      },
+      {
+        "titles": "tnormal",
+        "name": "tnormal",
+        "propertyUrl": "pre:tnormal",
+        "datatype": "string"
+      },
+      {
+        "name": "v1",
+        "virtual": true,
+        "propertyUrl": "pre:v1p{tnormal}",
+        "default": "{tnormal}",
+        "datatype": "string"
+      },
+      {
+        "name": "v2",
+        "virtual": true,
+        "propertyUrl": "pre:v2p{tnormal}",
+        "valueUrl": "pre:v2v{tnormal}"
+      },
+      {
+        "name": "v3",
+        "virtual": true,
+        "aboutUrl": "pre:v3s{tnormal}",
+        "propertyUrl": "pre:v3p{tnormal}",
+        "valueUrl": "pre:v3v{tnormal}"
+      }
+    ]
+  }
+}
