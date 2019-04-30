@@ -19,16 +19,19 @@ import pytest
 
 from pycsvw import CSVW
 
-
 NS = Namespace('https://www.example.org/')
 CSVW_NS = Namespace("http://www.w3.org/ns/csvw#")
 
 
 def test_time():
 
-    with CSVW(csv_path="tests/datatypes.time.csv",
-              metadata_path="tests/datatypes.time.csv-metadata.json") as csvw:
+    with pytest.warns(None) as record:
+        csvw = CSVW(csv_path="tests/datatypes.time.csv",
+                    metadata_path="tests/datatypes.time.csv-metadata.json")
         rdf_output = csvw.to_rdf()
+
+    assert len(record) == 0, "No warnings should be thrown, warning='{}' thrown".format(
+        record[0].message)
 
     g = ConjunctiveGraph()
     g.parse(data=rdf_output, format="turtle")
@@ -52,9 +55,14 @@ def test_time():
 
 
 def test_date():
-    with CSVW(csv_path="tests/datatypes.date.csv",
-              metadata_path="tests/datatypes.date.csv-metadata.json") as csvw:
+
+    with pytest.warns(None) as record:
+        csvw = CSVW(csv_path="tests/datatypes.date.csv",
+                    metadata_path="tests/datatypes.date.csv-metadata.json")
         rdf_output = csvw.to_rdf()
+
+    assert len(record) == 0, "No warnings should be thrown, warning='{}' thrown".format(
+        record[0].message)
 
     g = ConjunctiveGraph()
     g.parse(data=rdf_output, format="turtle")
@@ -76,9 +84,13 @@ def test_date():
 
 
 def test_datetime():
-    with CSVW(csv_path="tests/datatypes.datetime.csv",
-              metadata_path="tests/datatypes.datetime.csv-metadata.json") as csvw:
+    with pytest.warns(None) as record:
+        csvw = CSVW(csv_path="tests/datatypes.datetime.csv",
+                    metadata_path="tests/datatypes.datetime.csv-metadata.json")
         rdf_output = csvw.to_rdf()
+
+    assert len(record) == 0, "No warnings should be thrown, warning='{}' thrown".format(
+        record[0].message)
 
     g = ConjunctiveGraph()
     g.parse(data=rdf_output, format="turtle")
@@ -102,13 +114,14 @@ def test_datetime():
     assert len(list(g.triples((NS['event/1'], NS['datetimestamp'], datestamp)))) == 1
 
 
-@pytest.mark.parametrize("metadata_file", [
-    "tests/datatypes.others.csv-metadata.json",
-    "tests/datatypes.others_as_base.csv-metadata.json"])
-def test_others(metadata_file):
-    with CSVW(csv_path="tests/datatypes.others.csv",
-              metadata_path=metadata_file) as csvw:
+def test_others():
+    with pytest.warns(None) as record:
+        csvw = CSVW(csv_path="tests/datatypes.others.csv",
+                    metadata_path="tests/datatypes.others.csv-metadata.json")
         rdf_output = csvw.to_rdf()
+
+    assert len(record) == 0, "No warnings should be thrown, warning='{}' thrown".format(
+        record[0].message)
 
     g = ConjunctiveGraph()
     g.parse(data=rdf_output, format="turtle")
@@ -160,24 +173,3 @@ def test_others(metadata_file):
     for pred, lit_val, lit_type in triples_to_look_for:
         lit = Literal(lit_val, datatype=lit_type)
         assert len(list(g.triples((NS['event/1'], pred, lit)))) == 1, "Failed for {}".format(pred)
-
-
-def test_bool_with_format():
-    csvw = CSVW(csv_path="tests/datatypes.bool.csv",
-                metadata_path="tests/datatypes.bool.csv-metadata.json")
-    rdf_output = csvw.to_rdf()
-    g = ConjunctiveGraph()
-    g.parse(data=rdf_output, format="turtle")
-
-    true_lit = Literal(True, datatype=XSD.boolean)
-    false_lit = Literal(False, datatype=XSD.boolean)
-
-    assert len(list(g.triples((NS['event/1'], NS['bool1'], true_lit)))) == 1
-    assert len(list(g.triples((NS['event/1'], NS['bool2'], true_lit)))) == 1
-    assert len(list(g.triples((NS['event/1'], NS['bool3'], true_lit)))) == 1
-    assert len(list(g.triples((NS['event/2'], NS['bool1'], false_lit)))) == 1
-    assert len(list(g.triples((NS['event/2'], NS['bool2'], false_lit)))) == 1
-    assert len(list(g.triples((NS['event/2'], NS['bool3'], false_lit)))) == 1
-    assert len(list(g.triples((NS['event/3'], NS['bool1'], false_lit)))) == 1
-    assert len(list(g.triples((NS['event/3'], NS['bool2'], false_lit)))) == 1
-    assert len(list(g.triples((NS['event/3'], NS['bool3'], false_lit)))) == 1
