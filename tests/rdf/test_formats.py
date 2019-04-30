@@ -10,11 +10,11 @@
 # limitations under the License.
 
 import re
-from itertools import dropwhile, takewhile
+from itertools import dropwhile, takewhile, product
+import json
 import tempfile
 from mock import patch
 import os
-import stat
 
 from six.moves import zip
 import pytest
@@ -166,6 +166,37 @@ def test_individual_formats(fmt, validate_func, rdflib_input):
     validate_func(rdf_output)
     verify_rdf_contents(rdf_output, rdflib_input)
 
+@pytest.mark.parametrize('fmt, exclusions', product(
+    ('n3', 'turtle', 'rdf', 'rdf/xml', 'json-ld'), 
+    [{ u'owl'},
+     { u'as', u'cc', u'csvw', u'ctag', u'dc11', u'dqv', u'duv', u'gr', u'grddl',
+      u'ical', u'ldp', u'ma', u'oa', u'og', u'prov', u'qb', u'rdfa', u'rev', 
+      u'rif', u'rr', u'schema', u'sd', u'sioc', u'skos', u'skosxl', u'v', 
+      u'void', u'wdr', u'wrds', u'xhv', u'xml'}
+     ]))
+def test_excluded_prefixes(fmt, exclusions):
+    """
+    Ensure that names from `excluded_prefixes` do not appear in the output
+    """
+    excluded_prefixes = { fmt : exclusions }
+    csvw = CSVW(csv_path="./tests/books.csv",
+                metadata_path="./tests/books.csv-metadata.json",
+                excluded_prefixes=excluded_prefixes)
+    
+    assert hasattr(csvw, 'excluded_prefixes')
+    rdf_output = csvw.to_rdf(fmt=fmt)
+    if fmt == 'json-ld':
+        obj = json.loads(rdf_output)
+        prefixes_emitted = set(obj.get('@context', {}).keys())
+    else:
+        prefixes_emitted = {
+            m.group('prefix')
+            for line in rdf_output.splitlines()
+            for m in (re.match(r'^(@prefix\s+|\s*xmlns[:])(?P<prefix>\w+)', line),)
+            if m is not None
+        }
+    assert len(prefixes_emitted) > 0
+    assert prefixes_emitted.intersection(exclusions) == set([])
 
 @patch("pycsvw.csvw.find_executable")
 def test_all_formats(mock_find_executable):
@@ -214,40 +245,3 @@ def test_tmp_files():
     assert len(created_files) == 2, "ttl serialization should generate two temps file"
     assert any([f.endswith(".nt") for f in created_files])
     assert any([f.endswith(".ttl") for f in created_files])
-    # Check permissions
-    expected_flags = [stat.S_IRUSR, stat.S_IRGRP, stat.S_IROTH]
-    unexpected_flags = [stat.S_IWUSR, stat.S_IWGRP, stat.S_IWOTH]
-    for f in created_files:
-        st = os.stat(os.path.join(tmp_dir, f))
-        for flag, non_flag in zip(expected_flags, unexpected_flags):
-            assert bool(st.st_mode & flag)
-            assert not bool(st.st_mode & non_flag)
-
-    csvw.close()
-    assert len(os.listdir(tmp_dir)) == 0
-
-
-def test_context_mgr():
-    tmp_dir = tempfile.mkdtemp(dir="/tmp")
-    assert len(os.listdir(tmp_dir)) == 0
-
-    with CSVW(csv_path="./tests/books.csv",
-              metadata_path="./tests/books.csv-metadata.json",
-              temp_dir=tmp_dir) as csvw:
-        assert len(os.listdir(tmp_dir)) == 0
-
-        csvw.to_rdf(fmt="nt")
-        created_files = os.listdir(tmp_dir)
-        assert len(created_files) == 1, "nt serialization should generate only 1 temp file"
-        assert created_files[0].endswith(".nt")
-
-        os.remove(os.path.join(tmp_dir, created_files[0]))
-        assert len(os.listdir(tmp_dir)) == 0
-
-        csvw.to_rdf(fmt="turtle")
-        created_files = os.listdir(tmp_dir)
-        assert len(created_files) == 2, "ttl serialization should generate two temps file"
-        assert any([f.endswith(".nt") for f in created_files])
-        assert any([f.endswith(".ttl") for f in created_files])
-
-    assert len(os.listdir(tmp_dir)) == 0
