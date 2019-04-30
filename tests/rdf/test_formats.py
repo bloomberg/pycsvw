@@ -245,3 +245,9 @@ def test_tmp_files():
     assert len(created_files) == 2, "ttl serialization should generate two temps file"
     assert any([f.endswith(".nt") for f in created_files])
     assert any([f.endswith(".ttl") for f in created_files])
+
+
+
+
+
+

@@ -41,13 +41,3 @@ def test_riot_not_found_error(mock_find_executable):
     assert mock_find_executable.call_count == 1
 
 
-@pytest.mark.parametrize("fmt", ["R", "XX", "T", "M"])
-def test_invalid_formats(fmt):
-    csvw = pycsvw.CSVW(csv_path="./tests/books.csv",
-                       metadata_path="./tests/books.csv-metadata.json")
-    with pytest.raises(RiotError) as exc:
-        csvw.to_rdf(fmt=fmt)
-    assert "riot" in str(exc.value)
-
-
-

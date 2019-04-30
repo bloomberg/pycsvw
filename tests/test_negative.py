@@ -15,9 +15,7 @@ import io
 import pytest
 
 from pycsvw import CSVW
-from pycsvw.csvw_exceptions import BothLangAndDatatypeError, \
-    NumberOfNonVirtualColumnsMismatch, \
-    VirtualColumnPrecedesNonVirtualColumn
+from pycsvw.csvw_exceptions import BothLangAndDatatypeError
 
 
 def test_single_csv():
@@ -63,8 +61,6 @@ def test_multiple_csv():
     csv2_url = "http://wrong.org/ID-Age.csv"
 
     csv1_handle = io.StringIO(u"some text")
-    csv2_handle = io.StringIO(u"some other text")
-    csv3_handle = io.StringIO(u"yet another text")
 
     with pytest.raises(ValueError) as exc:
         csvw = CSVW(metadata_path=multiple_metadata_path, csv_path=csv1_path)
@@ -75,13 +71,6 @@ def test_multiple_csv():
         CSVW(metadata_path=multiple_metadata_path, csv_handle=csv1_handle)
     assert "metadata (2)" in str(exc.value)
     assert "csv_handle's (1)" in str(exc.value)
-
-    # Too many csv_handle
-    with pytest.raises(ValueError) as exc:
-        CSVW(metadata_path=multiple_metadata_path,
-             csv_handle=(csv1_handle, csv2_handle, csv3_handle))
-    assert "metadata (2)" in str(exc.value)
-    assert "csv_handle's (3)" in str(exc.value)
 
     # Too little csv_url
     with pytest.raises(ValueError) as exc:
@@ -136,42 +125,6 @@ def test_json_generation():
     with pytest.raises(NotImplementedError) as exc:
         csvw.to_json()
     assert "JSON generation" in str(exc.value)
-
-
-def test_metadata_mismatch():
-    csv_path = "tests/negative.metadata_mismatch.csv"
-
-    csvw1 = CSVW(csv_path=csv_path,
-                 metadata_path="tests/negative.NumberOfNonVirtualColumnsMismatch1.csv-metadata.json")
-    csvw2 = CSVW(csv_path=csv_path,
-                 metadata_path="tests/negative.NumberOfNonVirtualColumnsMismatch2.csv-metadata.json")
-
-    with pytest.raises(NumberOfNonVirtualColumnsMismatch) as exc:
-        print(csvw1.to_rdf())
-    assert "metadata, 2" in str(exc.value)
-    assert "row 1, 3" in str(exc.value)
-
-    with pytest.raises(NumberOfNonVirtualColumnsMismatch) as exc:
-        print(csvw2.to_rdf())
-    assert "metadata, 4" in str(exc.value)
-    assert "row 1, 3" in str(exc.value)
-
-    with pytest.raises(VirtualColumnPrecedesNonVirtualColumn) as exc:
-        CSVW(csv_path=csv_path,
-             metadata_path='tests/negative.VirtualColumnPrecedesNonVirtualColumn.csv-metadata.json')
-    assert "t2" in str(exc.value)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

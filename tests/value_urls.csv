@@ -1,4 +1,4 @@
-element,definition,type,maxlen,minlen,emptycol
-amount,the amount paid,decimal,10,1,
-description,description of the expense,string,100,,
-id,transaction id,integer,,0,
+element,definition,type,maxlen,minlen
+amount,the amount paid,decimal,10,1
+description,description of the expense,string,100,
+id,transaction id,integer,,0

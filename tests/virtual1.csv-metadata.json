@@ -7,17 +7,11 @@
   ],
   "url": "http://example.org/simple.csv",
   "tableSchema": {
-    "columns": [
-      {
+    "columns": [{
       "titles": "t1"
-      },
-      {
+    },{
       "titles": "t2"
-      },
-      {
-      "titles": "t3"
-      },
-      {
+    }, {
       "name": "v1",
       "virtual": true,
       "aboutUrl": "ns:sub-{_row}",

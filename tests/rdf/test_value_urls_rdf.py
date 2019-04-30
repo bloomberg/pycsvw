@@ -22,11 +22,9 @@ NS = Namespace('http://example.org/')
 def test_multiple_value_urls_in_virtual():
     csvw = CSVW(csv_path="tests/value_urls.csv",
                 metadata_path="tests/value_urls.csv-metadata.json")
-    rdf_contents = csvw.to_rdf(fmt="nt")
+    rdf_contents = csvw.to_rdf()
     g = ConjunctiveGraph()
-    g.parse(data=rdf_contents, format="nt")
-
-
+    g.parse(data=rdf_contents, format="turtle")
 
     # Test subjects
     all_subjects = list(g.subjects())
@@ -76,16 +74,11 @@ def test_multiple_value_urls_in_virtual():
     rest_amount_node = next(g.objects(subject=rest_amount_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_amount_node, RDF.first, XSD.MaxLength)))) == 1
     rest_amount_node = next(g.objects(subject=rest_amount_node, predicate=RDF.rest))
-    assert len(list(g.triples((rest_amount_node, RDF.first,
-                               Literal(10, datatype=XSD.nonNegativeInteger))))) == 1
+    assert len(list(g.triples((rest_amount_node, RDF.first, Literal(10, datatype=XSD.nonNegativeInteger))))) == 1
     rest_amount_node = next(g.objects(subject=rest_amount_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_amount_node, RDF.first, XSD.MinLength)))) == 1
     rest_amount_node = next(g.objects(subject=rest_amount_node, predicate=RDF.rest))
-    assert len(list(g.triples((rest_amount_node, RDF.first,
-                               Literal(1, datatype=XSD.nonNegativeInteger))))) == 1
-    rest_amount_node = next(g.objects(subject=rest_amount_node, predicate=RDF.rest))
-    assert len(list(g.triples((rest_amount_node, RDF.first, None)))) == 0
-    assert len(list(g.triples((rest_amount_node, RDF.rest, None)))) == 0
+    assert len(list(g.triples((rest_amount_node, RDF.first, Literal(1, datatype=XSD.nonNegativeInteger))))) == 1
 
     # Check the restrictions for description
     rest_desc_node = list(g.triples((r_desc, OWL.withRestrictions, None)))
@@ -95,8 +88,7 @@ def test_multiple_value_urls_in_virtual():
     rest_desc_node = next(g.objects(subject=rest_desc_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_desc_node, RDF.first, XSD.MaxLength)))) == 1
     rest_desc_node = next(g.objects(subject=rest_desc_node, predicate=RDF.rest))
-    assert len(list(g.triples((rest_desc_node, RDF.first,
-                               Literal(100, datatype=XSD.nonNegativeInteger))))) == 1
+    assert len(list(g.triples((rest_desc_node, RDF.first, Literal(100, datatype=XSD.nonNegativeInteger))))) == 1
     rest_desc_node = next(g.objects(subject=rest_desc_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_desc_node, RDF.first, None)))) == 0
     assert len(list(g.triples((rest_desc_node, RDF.rest, None)))) == 0
@@ -109,39 +101,13 @@ def test_multiple_value_urls_in_virtual():
     rest_id_node = next(g.objects(subject=rest_id_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_id_node, RDF.first, XSD.MinLength)))) == 1
     rest_id_node = next(g.objects(subject=rest_id_node, predicate=RDF.rest))
-    assert len(list(g.triples((rest_id_node, RDF.first,
-                               Literal(0, datatype=XSD.nonNegativeInteger))))) == 1
+    assert len(list(g.triples((rest_id_node, RDF.first, Literal(0, datatype=XSD.nonNegativeInteger))))) == 1
     rest_id_node = next(g.objects(subject=rest_id_node, predicate=RDF.rest))
     assert len(list(g.triples((rest_id_node, RDF.first, None)))) == 0
     assert len(list(g.triples((rest_id_node, RDF.rest, None)))) == 0
 
-    # Check constant value for each
-    const_prop = NS['another-list-value-with-constants']
-    for s in [r_amount, r_id, r_desc]:
-        constant_node = list(g.triples((r_amount, const_prop, None)))
-        constant_node = constant_node[0][2]
-        assert isinstance(constant_node, BNode)
-        assert len(list(g.triples((constant_node, RDF.first, XSD.Length)))) == 1
-        constant_node = next(g.objects(subject=constant_node, predicate=RDF.rest))
-        assert len(list(g.triples((constant_node, RDF.first,
-                                   Literal(1, datatype=XSD.nonNegativeInteger))))) == 1
-        constant_node = next(g.objects(subject=constant_node, predicate=RDF.rest))
-        assert len(list(g.triples((constant_node, RDF.first, None)))) == 0
-        assert len(list(g.triples((constant_node, RDF.rest, None)))) == 0
-
-    # Verify that empty valueUrl does not end up in graph or rdf contents
-    assert NS['empty-list-predicate1'] not in list(g.objects())
-    assert "empty-list-predicate1" not in rdf_contents
-
     # Verify that empty valueUrl does not end up in graph
-    assert NS['empty-list-predicate2'] not in list(g.objects())
-    assert "empty-list-predicate2" not in rdf_contents
-
-    # Test total number of lists through rdf:nils in order to verify each list
-    # ends up with a nil
-    test_num_lists = 3 * 3  # 3 rows and 3 virtual list valued columns
-    nil_text = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> ."
-    assert rdf_contents.count(nil_text) == test_num_lists
+    assert NS['empty-list-predicate'] not in list(g.objects())
 
 
 def test_negative():

@@ -37,8 +37,8 @@ setup(
     version=__version__,
     description='Generate JSON and RDF from csv files with metadata',
     url='https://github.com/bloomberg/pycsvw',
-    author='Dev Ramudit, Erman Korkut',
-    author_email='dramudit2@bloomberg.net, ekorkut1@bloomberg.net',
+    author='Dev Ramudit',
+    author_email='dramudit2@bloomberg.net',
 
     license='MIT',
 

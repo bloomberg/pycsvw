@@ -86,18 +86,6 @@ def test_default_with_datatype():
         assert active_val.datatype == XSD.boolean
         assert active_val.value
 
-        string_vals = list(g.triples((ns['sub-{}'.format(x)], ns['stringprop1'], None)))
-        assert len(string_vals) == 1
-        string_val = string_vals[0][2]
-        assert isinstance(string_val, Literal)
-        assert string_val.value == "some string"
-
-        string_vals = list(g.triples((ns['sub-{}'.format(x)], ns['stringprop2'], None)))
-        assert len(string_vals) == 1
-        string_val = string_vals[0][2]
-        assert isinstance(string_val, Literal)
-        assert "%20" not in string_val.value
-
 
 def test_negative_no_default_or_value():
     with pytest.raises(NoDefaultOrValueUrlError):

@@ -173,3 +173,12 @@ def test_others():
     for pred, lit_val, lit_type in triples_to_look_for:
         lit = Literal(lit_val, datatype=lit_type)
         assert len(list(g.triples((NS['event/1'], pred, lit)))) == 1, "Failed for {}".format(pred)
+
+
+
+    
+
+
+
+
+

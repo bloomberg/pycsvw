@@ -72,13 +72,11 @@ def test_main_using_urls(mock_urlopen):
         assert result.exit_code == 0
 
 
-def test_non_ascii_characters():
-    csv_path = "tests/utf8_encoding.csv"
-    metadata_path = "tests/utf8_encoding.csv-metadata.json"
 
-    runner = CliRunner()
 
-    result = runner.invoke(main, ["--csv-path", csv_path,
-                                  "--metadata-path", metadata_path,
-                                  "--rdf-dest", "turtle", "/dev/null"])
-    assert result.exit_code == 0
+
+
+
+
+
+
