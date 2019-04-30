@@ -16,8 +16,7 @@ from six import string_types
 
 from .generator_utils import process_dates_times, DATATYPE_MAP, read_csv
 from .csvw_exceptions import NullValueException, BothValueAndLiteralError, \
-    BothValueAndDatatypeError, NoValueOrLiteralError, InvalidItemError, \
-    NumberOfNonVirtualColumnsMismatch
+    BothValueAndDatatypeError, NoValueOrLiteralError, InvalidItemError
 from .rdf_utils import is_null_value, get_column_map, get_subject_for_cell, \
     get_predicate_for_cell, apply_all_subs
 
@@ -92,20 +91,20 @@ def write_objs_as_literal(output_obj, subject, predicate, raw_value, column_spec
         if datatype is not None:
             if isinstance(datatype, string_types):
                 # Don't specify strings
-                if datatype != "string":
+                if not datatype == "string":
                     kwargs["datatype"] = DATATYPE_MAP.get(datatype, datatype)
 
                     if datatype in DATE_TIME_TYPES:
                         value = process_dates_times(value, datatype)
+
             else:
                 # Dictionary valued data type
                 base = datatype["base"]
-                kwargs["datatype"] = DATATYPE_MAP.get(base, base)
+                spec = datatype["format"]
+                kwargs["datatype"] = DATATYPE_MAP[base]
                 if base == "boolean":
-                    spec = datatype.get("format", None)
-                    if spec is not None:
-                        true_value = spec.split('|')[0]
-                        value = "true" if value == true_value else "false"
+                    true_value = spec.split('|')[0]
+                    value = "true" if value == true_value else "false"
                 elif base in DATE_TIME_TYPES:
                     value = process_dates_times(value, base)
 
@@ -178,7 +177,7 @@ def write_obj_as_list(value_url, row_num, row, col, column_info,
                     b_node, RDF_FIRST, val
                 ).encode('utf-8'))
 
-            if ind != (num_items - 1):
+            if ind != num_items - 1:
                 # Still more items to come
                 new_node = get_new_blank_node()
                 output.write(u"{} <{}> {} .\n".format(
@@ -250,8 +249,8 @@ def write_row(output, row_num, row, table_info):
                 obj_val = apply_all_subs(value_url, row_num, row, column_info)
                 write_objs_as_uri(output, subject, predicate, obj_val)
         elif column_spec["default"]:
-            # Apply any substitution first, but without quoting
-            obj_val = apply_all_subs(column_spec["default"], row_num, row, column_info, False)
+            # Apply any substitution first
+            obj_val = apply_all_subs(column_spec["default"], row_num, row, column_info)
             write_objs_as_literal(output, subject, predicate, obj_val, column_spec)
 
 
@@ -272,7 +271,6 @@ def serialize(tables, md_tables, custom_prefixes, output_obj):
                 'prefixes': custom_prefixes
             }
         }
-        num_nonvirtual_columns = sum([1 for x in metadata["tableSchema"]["columns"] if not x["virtual"]])
         # Read the csv file fresh after rewinding the file
         table_file_obj = tables[table_url]
         table_file_obj.seek(0)
@@ -281,10 +279,4 @@ def serialize(tables, md_tables, custom_prefixes, output_obj):
         next(table_csv_reader)  # Ignore header
 
         for row_num, row in enumerate(table_csv_reader):
-            if len(row) != num_nonvirtual_columns:
-                raise NumberOfNonVirtualColumnsMismatch(
-                    "The number of non-virtual columns in metadata, {}, "
-                    "do not match with the number of columns in row {}, {}, "
-                    "of the csv file '{}'.".format(
-                        num_nonvirtual_columns, row_num + 1, len(row), table_url))
             write_row(output_obj, str(row_num + 1), row, table_info)
