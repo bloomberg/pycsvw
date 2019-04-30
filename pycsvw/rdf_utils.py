@@ -17,7 +17,7 @@ from six.moves.urllib.parse import quote  # pylint: disable=import-error
 from .csvw_exceptions import NullValueException, MissingColumnError, FailedSubstitutionError
 
 
-SUB_PATTERN = re.compile(r'{([A-Za-z0-9_\-# /:]+)}')
+SUB_PATTERN = re.compile(r'{(\w+)}')
 
 
 def is_null_value(val, null_values):
@@ -48,7 +48,7 @@ def get_column_map(table_schema):
     return column_map
 
 
-def apply_sub(url, row, column_name_to_sub, column_info, quote_sub=True):
+def apply_sub(url, row, column_name_to_sub, column_info):
     """ Apply a given substitution and raise if it is a null value. """
     try:
         column_ind, column_spec = column_info['column_map'][column_name_to_sub]
@@ -59,13 +59,10 @@ def apply_sub(url, row, column_name_to_sub, column_info, quote_sub=True):
         raise NullValueException("'{}' is one of the null values specified")
 
     rep_before = "{" + column_name_to_sub + "}"
-    if quote_sub:
-        return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/#'))
-    else:
-        return url.replace(rep_before, rep_after)
+    return url.replace(rep_before, quote(rep_after.encode('utf-8'), safe=':/'))
 
 
-def apply_all_subs(url, row_num, row, column_info, quote_sub=True):
+def apply_all_subs(url, row_num, row, column_info):
     """ Apply all substitutions (in format of {columnName}) and resolve the url """
 
     # Early return just with resolving if nothing to substitute
@@ -77,7 +74,7 @@ def apply_all_subs(url, row_num, row, column_info, quote_sub=True):
     subs = SUB_PATTERN.findall(out)
     for sub in subs:
         try:
-            out = apply_sub(out, row, sub, column_info, quote_sub)
+            out = apply_sub(out, row, sub, column_info)
         except NullValueException:
             raise
         except Exception as e:
