@@ -12,3 +12,5 @@
 """ __init__ file for pycsvw module """
 # Allow the import statement 'from pycsvw import CSVW'
 from .csvw import CSVW
+
+__version__ = "1.1.0"
